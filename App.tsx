@@ -1,20 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { RequestCameraPermission } from "./src/utils";
+import { CameraPermissionDenied, CameraScreen } from "./src/components";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  useEffect(() => {
+    const checkCameraPermission = async () => {
+      const permission = await RequestCameraPermission ();
+      setHasCameraPermission(permission);
+    };
+
+    checkCameraPermission();
+  }, []);
+
+  if (hasCameraPermission === null) return null;
+  if (hasCameraPermission === false) return <CameraPermissionDenied  />
+
+  return <CameraScreen />;
+}

@@ -1,0 +1,1 @@
+### Example of how to use the camera in React Native
